@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>わたしを知る数秘</title>
+
+  <style>
+    body {
+      font-family: "Yu Gothic", "Hiragino Sans", sans-serif;
+      background: #fffaf2;
+      color: #444;
+      margin: 0;
+      padding: 30px 15px;
+    }
+
+    .container {
+      max-width: 650px;
+      margin: auto;
+      background: #ffffff;
+      padding: 35px 25px;
+      border-radius: 24px;
+      box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 28px;
+      margin-bottom: 8px;
+    }
+
+    .subtitle {
+      text-align: center;
+      color: #777;
+      margin-bottom: 30px;
+      line-height: 1.7;
+    }
+
+    .input-area {
+      background: #e8f6ef;
+      padding: 25px;
+      border-radius: 18px;
+      text-align: center;
+    }
+
+    input {
+      font-size: 18px;
+      padding: 12px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+    }
+
+    button {
+      display: block;
+      width: 100%;
+      margin-top: 20px;
+      padding: 15px;
+      border: none;
+      border-radius: 14px;
+      background: #5dbb9b;
+      color: white;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    #result {
+      display: none;
+      margin-top: 30px;
+    }
+
+    .number-card {
+      padding: 20px;
+      border-radius: 18px;
+      margin-bottom: 15px;
+      text-align: center;
+    }
+
+    .talent {
+      background: #fff0f3;
+    }
+
+    .life {
+      background: #fff7d6;
+    }
+
+    .search {
+      background: #e8f6ef;
+    }
+
+    .label {
+      font-size: 17px;
+      font-weight: bold;
+    }
+
+    .number {
+      font-size: 52px;
+      font-weight: bold;
+      margin: 8px 0;
+    }
+
+    .explanation {
+      font-size: 14px;
+      color: #666;
+      line-height: 1.7;
+    }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+
+  <h1>わたしを知る数秘</h1>
+
+  <p class="subtitle">
+    誕生日から<br>
+    あなたの中にある3つの数字を見てみましょう
+  </p>
+
+  <div class="input-area">
+
+    <p><strong>あなたの誕生日を入力してください</strong></p>
+
+    <input type="date" id="birthday">
+
+    <button onclick="calculateNumerology()">
+      数秘を見てみる
+    </button>
+
+  </div>
+
+  <div id="result">
+
+    <div class="number-card talent">
+      <div class="label">才能数</div>
+      <div class="number" id="talentNumber"></div>
+      <div class="explanation">
+        あなたが自然に使いやすい才能や<br>
+        表に現れやすい部分
+      </div>
+    </div>
+
+    <div class="number-card life">
+      <div class="label">本質数</div>
+      <div class="number" id="lifeNumber"></div>
+      <div class="explanation">
+        あなたの人生の中心にある<br>
+        本質的な性質
+      </div>
+    </div>
+
+    <div class="number-card search">
+      <div class="label">探求数</div>
+      <div class="number" id="searchNumber"></div>
+      <div class="explanation">
+        心の奥で求めていることや<br>
+        大切にしたい価値観
+      </div>
+    </div>
+
+  </div>
+
+</div>
+
+<script>
+
+function reduceNumber(number) {
+
+  // 11・22・33はそのまま残す
+  if (number === 11 || number === 22 || number === 33) {
+    return number;
+  }
+
+  while (number > 9) {
+
+    number = number
+      .toString()
+      .split("")
+      .reduce((sum, digit) => sum + Number(digit), 0);
+
+    if (number === 11 || number === 22 || number === 33) {
+      return number;
+    }
+  }
+
+  return number;
+}
+
+
+function digitSum(value) {
+
+  return value
+    .toString()
+    .split("")
+    .reduce((sum, digit) => sum + Number(digit), 0);
+}
+
+
+function calculateNumerology() {
+
+  const birthday = document.getElementById("birthday").value;
+
+  if (!birthday) {
+    alert("誕生日を入力してください");
+    return;
+  }
+
+  const parts = birthday.split("-");
+
+  const year = parts[0];
+  const month = parts[1];
+  const day = parts[2];
+
+  // 才能数：生まれた日
+  const talent =
+    reduceNumber(digitSum(day));
+
+  // 本質数：生年月日の数字をすべて足す
+  const life =
+    reduceNumber(
+      digitSum(year) +
+      digitSum(month) +
+      digitSum(day)
+    );
+
+  // 探求数：月と日の数字をすべて足す
+  const search =
+    reduceNumber(
+      digitSum(month) +
+      digitSum(day)
+    );
+
+  document.getElementById("talentNumber").textContent = talent;
+  document.getElementById("lifeNumber").textContent = life;
+  document.getElementById("searchNumber").textContent = search;
+
+  document.getElementById("result").style.display = "block";
+}
+
+</script>
+
+</body>
+</html>
